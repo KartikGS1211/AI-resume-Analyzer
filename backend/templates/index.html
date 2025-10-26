@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume Analyzer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background-color: #f4f6f8;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input[type=file] {
+      margin-top: 10px;
+      width: 100%;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+    pre {
+      background-color: #eef;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Resume Analyzer (Gemini API)</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="resume" accept=".pdf,.docx" required>
+      <button type="submit">Analyze Resume</button>
+    </form>
+
+    <h3>Response:</h3>
+    <pre id="output"></pre>
+  </div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      output.textContent = "Analyzing... Please wait ⏳";
+
+      const res = await fetch('/analyze', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      output.textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
