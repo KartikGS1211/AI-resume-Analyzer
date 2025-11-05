@@ -9,8 +9,9 @@ import { ThemeProvider } from './components/ThemeProvider';
 import { Toaster } from './components/ui/sonner';
 import { Button } from './components/ui/button';
 import { Menu, X } from 'lucide-react';
+import JobRecommendations from './components/JobRecommendations';
 
-export type Page = 'dashboard' | 'upload' | 'feedback' | 'history' | 'admin';
+export type Page = 'dashboard' | 'upload' | 'feedback' | 'history' | 'admin' | 'jobs';
 
 export interface ResumeAnalysis {
   id: string;
@@ -64,6 +65,8 @@ function App() {
         return <History onViewFeedback={handleViewFeedback} />;
       case 'admin':
         return <AdminDashboard />;
+      case 'jobs' :
+        return <JobRecommendations />;
       default:
         return <Dashboard onNavigateToUpload={() => handleNavigate('upload')} />;
     }

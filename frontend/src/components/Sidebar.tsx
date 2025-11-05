@@ -17,10 +17,13 @@ const navItems = [
   { id: 'feedback' as Page, label: 'Feedback', icon: FileText },
   { id: 'history' as Page, label: 'History', icon: History },
   { id: 'admin' as Page, label: 'Admin', icon: Shield },
+  { id: 'jobs' as Page, label: 'Job Recommendations', icon: Home },
 ];
 
 export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarProps) {
   const { theme, toggleTheme } = useTheme();
+
+
 
   return (
     <TooltipProvider delayDuration={300}>
