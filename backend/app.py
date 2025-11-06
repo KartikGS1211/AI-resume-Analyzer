@@ -1,4 +1,7 @@
 import os
+import re
+import json
+import requests
 from flask import Flask, request, jsonify, render_template
 from PyPDF2 import PdfReader
 import docx2txt
@@ -6,20 +9,34 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from flask_cors import CORS
 
-
+# ==========================
+# 🌟 Flask App Setup
+# ==========================
 app = Flask(__name__)
 CORS(app)
-# Load environment variables
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
-
-# Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+# ==========================
+# 🤖 Gemini Configuration
+# ==========================
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
+# ==========================
+# 🔑 RapidAPI Configuration
+# ==========================
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+
+if not RAPIDAPI_KEY:
+    print("⚠️ RAPIDAPI_KEY not found in environment variables! Check your .env file.")
+else:
+    print("✅ RAPIDAPI_KEY loaded successfully!")
+
+# ==========================
+# 📄 Resume Text Extraction
+# ==========================
 def extract_text_from_resume(file_path):
     """Extract text from PDF or DOCX."""
     if file_path.endswith('.pdf'):
@@ -33,7 +50,9 @@ def extract_text_from_resume(file_path):
     else:
         return ""
 
-
+# ==========================
+# 🧠 Analyze Resume with Gemini
+# ==========================
 def analyze_resume_with_gemini(resume_text):
     """Send resume text to Gemini and get ATS score, feedback, and analysis."""
     prompt = f"""
@@ -53,8 +72,6 @@ def analyze_resume_with_gemini(resume_text):
     model = genai.GenerativeModel("gemini-2.5-flash")
     response = model.generate_content(prompt)
 
-    # Try to extract clean JSON
-    import json, re
     text_response = response.text.strip()
     json_match = re.search(r'\{.*\}', text_response, re.DOTALL)
     if json_match:
@@ -63,18 +80,19 @@ def analyze_resume_with_gemini(resume_text):
         except json.JSONDecodeError:
             pass
 
-    # Fallback if model didn’t strictly follow JSON format
     return {
         "ats_score": None,
         "feedback": text_response,
         "analysis": "Could not parse JSON, returning raw output."
     }
 
+# ==========================
+# 🧩 Routes
+# ==========================
 
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
-
 
 @app.route('/analyze', methods=['POST'])
 def analyze_resume():
@@ -85,19 +103,60 @@ def analyze_resume():
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
-    # Save file
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(file_path)
 
-    # Extract text
     resume_text = extract_text_from_resume(file_path)
     if not resume_text.strip():
         return jsonify({"error": "Could not extract text from resume"}), 400
 
-    # Analyze using Gemini
     result = analyze_resume_with_gemini(resume_text)
     return jsonify(result)
 
+@app.route("/jobs", methods=["POST"])
+def get_jobs():
+    try:
+        data = request.get_json(force=True)
+        role = data.get("role", "").strip() or "Software Engineer"
+        location = data.get("location", "").strip() or "India"
 
+        print(f"📥 Received request for: Role='{role}', Location='{location}'")
+
+        if not RAPIDAPI_KEY:
+            return jsonify({"error": "Missing RapidAPI key"}), 500
+
+        url = "https://jsearch.p.rapidapi.com/search"
+        headers = {
+            "x-rapidapi-key": RAPIDAPI_KEY,
+            "x-rapidapi-host": "jsearch.p.rapidapi.com"
+        }
+        params = {
+            "query": f"{role} jobs in {location}",
+            "page": "1",
+            "num_pages": "1",
+            "country": "in",
+            "date_posted": "all"
+        }
+
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        api_data = response.json()
+
+        print(f"✅ API returned {len(api_data.get('data', []))} jobs")
+
+        return jsonify({"data": api_data.get("data", [])}), 200
+
+    except requests.exceptions.RequestException as e:
+        print("❌ RapidAPI Request Error:", e)
+        return jsonify({"error": "Failed to fetch jobs from RapidAPI"}), 500
+
+    except Exception as e:
+        print("❌ Server Error:", e)
+        return jsonify({"error": str(e)}), 500
+
+# ==========================
+# 🚀 Run the Flask Server
+# ==========================
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("🚀 Flask backend running at http://127.0.0.1:5000")
+    app.run(debug=True, port=5000)
