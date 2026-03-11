@@ -4,19 +4,19 @@ AI Resume Analyzer is a modern web application designed to help job seekers opti
 
 ---
 
-## 🚀 Features
+##  Features
 
-- 📊 **Interactive Dashboard:** Get a comprehensive overview of your resume performance, complete with skill gap analysis, historical charts, and scores.
-- 📄 **Smart Resume Upload & Parsing:** Support for PDF and DOCX formats. Automatically extracts text and processes it for evaluation.
-- 🤖 **AI-Powered Analysis:** Leverages Google's Gemini AI (Gemini 2.5 Flash) to provide actionable feedback, calculate an ATS score out of 100, and deliver comprehensive resume analysis.
-- 🧳 **Job Recommendations:** Integrated with RapidAPI (JSearch) to fetch real-time job listings matching your role and location directly within the application.
-- 🕒 **History Tracking:** Maintain a log of previous resume analyses to monitor improvements over time.
-- 🔐 **Admin Dashboard:** Access an admin interface to manage job roles, keywords, and view user analytics and common skill gaps.
-- 🌗 **Dark Mode Support:** Seamlessly toggle between light and dark themes for a comfortable user experience.
+-  **Interactive Dashboard:** Get a comprehensive overview of your resume performance, complete with skill gap analysis, historical charts, and scores.
+-  **Smart Resume Upload & Parsing:** Support for PDF and DOCX formats. Automatically extracts text and processes it for evaluation.
+-  **AI-Powered Analysis:** Leverages Google's Gemini AI (Gemini 2.5 Flash) to provide actionable feedback, calculate an ATS score out of 100, and deliver comprehensive resume analysis.
+-  **Job Recommendations:** Integrated with RapidAPI (JSearch) to fetch real-time job listings matching your role and location directly within the application.
+-  **History Tracking:** Maintain a log of previous resume analyses to monitor improvements over time.
+-  **Admin Dashboard:** Access an admin interface to manage job roles, keywords, and view user analytics and common skill gaps.
+-  **Dark Mode Support:** Seamlessly toggle between light and dark themes for a comfortable user experience.
 
 ---
 
-## 💻 Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **Framework:** React 18 (TypeScript), Vite
@@ -32,7 +32,7 @@ AI Resume Analyzer is a modern web application designed to help job seekers opti
 
 ---
 
-## 🛠️ Installation & Setup
+##  Installation & Setup
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher)
@@ -97,7 +97,7 @@ AI Resume Analyzer is a modern web application designed to help job seekers opti
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```text
 ├── backend/
@@ -118,7 +118,7 @@ AI Resume Analyzer is a modern web application designed to help job seekers opti
 
 ---
 
-## 📝 Usage Workflow
+##  Usage Workflow
 
 1. Ensure both the Flask backend and the React frontend development servers are running.
 2. Open the application in your browser.
