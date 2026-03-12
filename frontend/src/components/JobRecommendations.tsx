@@ -31,7 +31,7 @@ const JobRecommendations: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/jobs", {
+      const response = await axios.post("https://ai-resume-analyzer-gf2r.onrender.com/jobs", {
         role,
         location,
       });

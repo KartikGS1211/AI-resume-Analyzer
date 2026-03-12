@@ -102,7 +102,7 @@ export function UploadResume() {
     formData.append('resume', file);
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/analyze', {
+      const res = await fetch('https://ai-resume-analyzer-gf2r.onrender.com/analyze', {
         method: 'POST',
         body: formData,
       });
@@ -254,21 +254,21 @@ export function UploadResume() {
     [
       {
         content: 'Feedback',
-        styles: { fontStyle: 'bold', valign: 'middle', halign: 'center' },
+        styles: { fontStyle: 'bold' as const, valign: 'middle' as const, halign: 'center' as const },
       },
       {
         content: result.feedback || 'No feedback provided.',
-        styles: { halign: 'left' },
+        styles: { halign: 'left' as const },
       },
     ],
     [
       {
         content: 'Detailed Analysis',
-        styles: { fontStyle: 'bold', valign: 'middle', halign: 'center' },
+        styles: { fontStyle: 'bold' as const, valign: 'middle' as const, halign: 'center' as const },
       },
       {
         content: result.analysis || 'No analysis available.',
-        styles: { halign: 'left' },
+        styles: { halign: 'left' as const },
       },
     ],
   ];
